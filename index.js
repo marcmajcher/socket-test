@@ -9,16 +9,27 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  socket.broadcast.emit('* connected *');
+  let prefix = '>';
+
   socket.on('chat', (msg) => {
-    io.emit('chat', msg);
+    prefix = msg;
   });
 
+  const interval = setInterval(getCallback(), 1000, socket);
+
   socket.on('disconnect', () => {
-    console.log('DIIIIISCONNETED');
+    clearInterval(interval);
   });
 });
 
 http.listen(3000, () => {
   console.log('listening on *:3000');
 });
+
+function getCallback() {
+  let count = 0;
+  return (socket) => {
+    console.log(count);
+    socket.emit('chat', count++);
+  }
+}
