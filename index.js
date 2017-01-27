@@ -31,5 +31,5 @@ function getCallback() {
   return (socket) => {
     console.log(count);
     socket.emit('chat', count++);
-  }
+  };
 }
